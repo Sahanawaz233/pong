@@ -4,25 +4,21 @@ module tb_pong_top();
 
     // Inputs
     reg clk;
-    reg btn_left;
-    reg btn_right;
-    reg btn_reset;
+    reg [3:0] btn;
 
     // Outputs
-    wire hsync;
-    wire vsync;
-    wire [3:0] vga_r;
-    wire [3:0] vga_g;
-    wire [3:0] vga_b;
+    wire vga_hs;
+    wire vga_vs;
+    wire [4:0] vga_r;
+    wire [5:0] vga_g;
+    wire [4:0] vga_b;
 
     // Instantiate the Unit Under Test (UUT)
     pong_top uut (
         .clk(clk), 
-        .btn_left(btn_left), 
-        .btn_right(btn_right), 
-        .btn_reset(btn_reset), 
-        .hsync(hsync), 
-        .vsync(vsync), 
+        .btn(btn), 
+        .vga_hs(vga_hs), 
+        .vga_vs(vga_vs), 
         .vga_r(vga_r), 
         .vga_g(vga_g), 
         .vga_b(vga_b)
@@ -36,23 +32,22 @@ module tb_pong_top();
 
     initial begin
         // Initialize Inputs
-        btn_left = 0;
-        btn_right = 0;
+        btn = 4'b0000;
         
-        // Apply Reset
-        btn_reset = 1;
+        // Apply Reset (BTN3)
+        btn[3] = 1;
         #100;
-        btn_reset = 0;
+        btn[3] = 0;
 
         // Note: A full VGA frame takes ~16.6ms at 60Hz. 
         // Simulating a full frame can take a while in Vivado depending on your PC.
         // We will simulate for 20ms to ensure we capture at least one full VSYNC cycle.
         
-        // Simulate pressing the right button to move the paddle
+        // Simulate pressing the right button (BTN1) to move the paddle
         #50000;
-        btn_right = 1;
+        btn[1] = 1;
         #5000000; // Hold for 5ms
-        btn_right = 0;
+        btn[1] = 0;
         
         #15000000; // Wait out the rest of the 20ms
         

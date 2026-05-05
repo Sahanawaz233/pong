@@ -18,17 +18,20 @@
 
 module pong_top (
     input wire clk,          // 125MHz system clock
-    input wire btn_left,     // Button to move left
-    input wire btn_right,    // Button to move right
-    input wire btn_reset,    // Active-high reset button
+    input wire [3:0] btn,    // 4 Push Buttons
     
-    // VGA Outputs (12-bit color 4:4:4)
-    output wire hsync,
-    output wire vsync,
-    output wire [3:0] vga_r,
-    output wire [3:0] vga_g,
-    output wire [3:0] vga_b
+    // VGA Outputs (16-bit color 5:6:5)
+    output wire vga_hs,
+    output wire vga_vs,
+    output wire [4:0] vga_r,
+    output wire [5:0] vga_g,
+    output wire [4:0] vga_b
 );
+
+    // Map buttons to internal signals
+    wire btn_left  = btn[0]; // BTN0
+    wire btn_right = btn[1]; // BTN1
+    wire btn_reset = btn[3]; // BTN3
 
     // Internal signals
     wire pixel_clk;
@@ -39,12 +42,12 @@ module pong_top (
     wire [9:0] paddle_y;
     wire [9:0] ball_x;
     wire [9:0] ball_y;
-    wire [11:0] rgb;
+    wire [15:0] rgb;
     
-    // Map internal 12-bit RGB to separate 4-bit output ports
-    assign vga_r = rgb[11:8];
-    assign vga_g = rgb[7:4];
-    assign vga_b = rgb[3:0];
+    // Map internal 16-bit RGB to separate output ports
+    assign vga_r = rgb[15:11]; // 5 bits Red
+    assign vga_g = rgb[10:5];  // 6 bits Green
+    assign vga_b = rgb[4:0];   // 5 bits Blue
 
     // 1. Clock Divider (125MHz -> 25MHz pixel clock)
     clk_divider u_clk_div (
@@ -57,8 +60,8 @@ module pong_top (
     vga_sync u_vga_sync (
         .pixel_clk(pixel_clk),
         .reset(btn_reset),
-        .hsync(hsync),
-        .vsync(vsync),
+        .hsync(vga_hs),
+        .vsync(vga_vs),
         .video_on(video_on),
         .p_tick(), // Left unconnected, not strictly needed outside
         .pixel_x(pixel_x),
@@ -71,7 +74,7 @@ module pong_top (
         .reset(btn_reset),
         .btn_left(btn_left),
         .btn_right(btn_right),
-        .vsync(vsync),     // Update state once per frame
+        .vsync(vga_vs),     // Update state once per frame
         .paddle_x(paddle_x),
         .paddle_y(paddle_y),
         .ball_x(ball_x),

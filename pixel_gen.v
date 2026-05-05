@@ -9,7 +9,7 @@ module pixel_gen (
     input wire [9:0] paddle_y,
     input wire [9:0] ball_x,
     input wire [9:0] ball_y,
-    output reg [11:0] rgb
+    output reg [15:0] rgb
 );
 
     // Paddle dimensions (matches game_logic)
@@ -19,10 +19,10 @@ module pixel_gen (
     // Ball dimension (matches game_logic)
     localparam BALL_S = 8;
     
-    // Colors (12-bit RGB format: 4-bits Red, 4-bits Green, 4-bits Blue)
-    localparam COLOR_BG     = 12'h000; // Black background
-    localparam COLOR_PADDLE = 12'h0F0; // Green paddle
-    localparam COLOR_BALL   = 12'hF00; // Red ball
+    // Colors (16-bit RGB format: 5-bits Red, 6-bits Green, 5-bits Blue)
+    localparam COLOR_BG     = 16'h0000; // Black background
+    localparam COLOR_PADDLE = 16'h07E0; // Green paddle (RGB565)
+    localparam COLOR_BALL   = 16'hF800; // Red ball (RGB565)
     
     // Combinational logic to check if current pixel is inside the paddle or ball
     wire paddle_on = (pixel_x >= paddle_x) && (pixel_x < paddle_x + PADDLE_W) &&
