@@ -1,19 +1,15 @@
 `timescale 1ns / 1ps
 
 /*
- * FPGA-based VGA Mini Game Engine (Pong)
+ * FPGA-based VGA 2-Player Pong
  * Top Level Module
  * 
- * Pin mapping suggestions for Digilent Zybo / Arty S7:
- * clk       : K17 (125 MHz oscillator for Zybo) / E3 (for Arty)
- * btn_left  : (Assign to one of the 4 push buttons, e.g., BTN0)
- * btn_right : (Assign to one of the 4 push buttons, e.g., BTN1)
- * btn_reset : (Assign to one of the 4 push buttons or a slide switch)
- * hsync     : (Assign to PMOD pin for HSYNC)
- * vsync     : (Assign to PMOD pin for VSYNC)
- * vga_r     : (Assign to PMOD pins for Red)
- * vga_g     : (Assign to PMOD pins for Green)
- * vga_b     : (Assign to PMOD pins for Blue)
+ * Target Board: Digilent Zybo Rev B (xc7z010clg400-1)
+ * clk       : L16 (125 MHz oscillator)
+ * btn[3:0]  : R18, P16, V16, Y16 (Player Controls)
+ * sw[0]     : G15 (Reset)
+ * vga_hs/vs : P19, R19
+ * vga_rgb   : Built-in VGA port (16-bit RGB565)
  */
 
 module pong_top (
