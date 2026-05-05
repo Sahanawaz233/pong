@@ -15,13 +15,19 @@ This repository contains the Verilog HDL source code for a complete, real-time P
 - `game_logic.v` - Handles ball movement, bouncing, and paddle logic
 - `tb_pong_top.v` / `tb_pong_image.v` - Testbenches for simulation
 
-## Hardware Connections (Digilent Zybo)
-- **Clock**: `K17` (125 MHz)
-- **Buttons**:
-  - `BTN0` - Move Paddle Left
-  - `BTN1` - Move Paddle Right
-  - `BTN3` - Reset Game
-- **VGA Output**: Built-in Zybo VGA port (12-bit color 4:4:4)
+## Hardware Connections & Constraints (Zybo Rev B)
+**Target FPGA Chip:** `xc7z010clg400-1`
+
+- **System Clock**: `L16` (125 MHz)
+- **Buttons (`btn[3:0]`)**:
+  - `BTN0` (`R18`) - Move Paddle Left
+  - `BTN1` (`P16`) - Move Paddle Right
+  - `BTN3` (`Y16`) - Reset Game
+- **VGA Output**: Built-in Zybo VGA port (16-bit color format RGB565)
+  - **Red (`vga_r[4:0]`)**: `M19, L20, J20, G20, F19`
+  - **Green (`vga_g[5:0]`)**: `H18, N20, L19, J19, H20, F20`
+  - **Blue (`vga_b[4:0]`)**: `P20, M20, K19, J18, G19`
+  - **Sync**: `P19` (HSYNC), `R19` (VSYNC)
 
 ## How to Run
 1. Create a new RTL project in Xilinx Vivado.
