@@ -19,6 +19,7 @@
 module pong_top (
     input wire clk,          // 125MHz system clock
     input wire [3:0] btn,    // 4 Push Buttons
+    input wire [0:0] sw,     // Slide switch for reset
     
     // VGA Outputs (16-bit color 5:6:5)
     output wire vga_hs,
@@ -28,18 +29,16 @@ module pong_top (
     output wire [4:0] vga_b
 );
 
-    // Map buttons to internal signals
-    wire btn_left  = btn[0]; // BTN0
-    wire btn_right = btn[1]; // BTN1
-    wire btn_reset = btn[3]; // BTN3
+    // Map switch to reset signal
+    wire btn_reset = sw[0]; // SW0 acts as Reset
 
     // Internal signals
     wire pixel_clk;
     wire video_on;
     wire [9:0] pixel_x;
     wire [9:0] pixel_y;
-    wire [9:0] paddle_x;
-    wire [9:0] paddle_y;
+    wire [9:0] paddle1_y;
+    wire [9:0] paddle2_y;
     wire [9:0] ball_x;
     wire [9:0] ball_y;
     wire [15:0] rgb;
@@ -72,11 +71,10 @@ module pong_top (
     game_logic u_game_logic (
         .clk(pixel_clk),
         .reset(btn_reset),
-        .btn_left(btn_left),
-        .btn_right(btn_right),
-        .vsync(vga_vs),     // Update state once per frame
-        .paddle_x(paddle_x),
-        .paddle_y(paddle_y),
+        .btn(btn),         // Pass all 4 buttons
+        .vsync(vga_vs),    // Update state once per frame
+        .paddle1_y(paddle1_y),
+        .paddle2_y(paddle2_y),
         .ball_x(ball_x),
         .ball_y(ball_y)
     );
@@ -87,8 +85,8 @@ module pong_top (
         .video_on(video_on),
         .pixel_x(pixel_x),
         .pixel_y(pixel_y),
-        .paddle_x(paddle_x),
-        .paddle_y(paddle_y),
+        .paddle1_y(paddle1_y),
+        .paddle2_y(paddle2_y),
         .ball_x(ball_x),
         .ball_y(ball_y),
         .rgb(rgb)

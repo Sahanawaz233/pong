@@ -5,6 +5,7 @@ module tb_pong_top();
     // Inputs
     reg clk;
     reg [3:0] btn;
+    reg [0:0] sw;
 
     // Outputs
     wire vga_hs;
@@ -17,6 +18,7 @@ module tb_pong_top();
     pong_top uut (
         .clk(clk), 
         .btn(btn), 
+        .sw(sw),
         .vga_hs(vga_hs), 
         .vga_vs(vga_vs), 
         .vga_r(vga_r), 
@@ -33,11 +35,12 @@ module tb_pong_top();
     initial begin
         // Initialize Inputs
         btn = 4'b0000;
+        sw = 1'b0;
         
-        // Apply Reset (BTN3)
-        btn[3] = 1;
+        // Apply Reset (SW0)
+        sw[0] = 1;
         #100;
-        btn[3] = 0;
+        sw[0] = 0;
 
         // Note: A full VGA frame takes ~16.6ms at 60Hz. 
         // Simulating a full frame can take a while in Vivado depending on your PC.

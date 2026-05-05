@@ -20,9 +20,12 @@ This repository contains the Verilog HDL source code for a complete, real-time P
 
 - **System Clock**: `L16` (125 MHz)
 - **Buttons (`btn[3:0]`)**:
-  - `BTN0` (`R18`) - Move Paddle Left
-  - `BTN1` (`P16`) - Move Paddle Right
-  - `BTN3` (`Y16`) - Reset Game
+  - `BTN0` (`R18`) - Player 1 Move Up
+  - `BTN1` (`P16`) - Player 1 Move Down
+  - `BTN2` (`V16`) - Player 2 Move Up
+  - `BTN3` (`Y16`) - Player 2 Move Down
+- **Switches (`sw[0]`)**:
+  - `SW0` (`G15`) - Reset Game
 - **VGA Output**: Built-in Zybo VGA port (16-bit color format RGB565)
   - **Red (`vga_r[4:0]`)**: `M19, L20, J20, G20, F19`
   - **Green (`vga_g[5:0]`)**: `H18, N20, L19, J19, H20, F20`
