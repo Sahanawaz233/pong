@@ -28,10 +28,10 @@ module tb_pong_image();
         .vga_b(vga_b)
     );
 
-    // 125MHz clock generation (8ns period)
+    // 100MHz clock generation
     initial begin
         clk = 0;
-        forever #4 clk = ~clk;
+        forever #5 clk = ~clk;
     end
 
     // File handle for the image

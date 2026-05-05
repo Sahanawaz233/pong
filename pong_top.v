@@ -4,19 +4,16 @@
  * FPGA-based VGA Mini Game Engine (Pong)
  * Top Level Module
  * 
- * Pin mapping for Digilent Zybo (Zynq-7000):
- * clk       : L16 (125 MHz oscillator)
- * btn_left  : P16 (BTN1)
- * btn_right : V16 (BTN2)
- * btn_reset : R18 (BTN0)
- * hsync     : P19 (VGA_HS)
- * vsync     : R19 (VGA_VS)
- * vga_r[3:0]: F20, G20, J20, L20  (Zybo VGA_R 4,3,2,1)
- * vga_g[3:0]: F19, H20, J19, L19  (Zybo VGA_G 5,4,3,2)
- * vga_b[3:0]: G19, J18, K19, M20  (Zybo VGA_B 4,3,2,1)
- *
- * Note: Zybo supports up to 16-bit color. We map our 12-bit output to the
- * most significant bits of the Zybo VGA port for maximum brightness.
+ * Pin mapping suggestions for Digilent Zybo / Arty S7:
+ * clk       : K17 (125 MHz oscillator for Zybo) / E3 (for Arty)
+ * btn_left  : (Assign to one of the 4 push buttons, e.g., BTN0)
+ * btn_right : (Assign to one of the 4 push buttons, e.g., BTN1)
+ * btn_reset : (Assign to one of the 4 push buttons or a slide switch)
+ * hsync     : (Assign to PMOD pin for HSYNC)
+ * vsync     : (Assign to PMOD pin for VSYNC)
+ * vga_r     : (Assign to PMOD pins for Red)
+ * vga_g     : (Assign to PMOD pins for Green)
+ * vga_b     : (Assign to PMOD pins for Blue)
  */
 
 module pong_top (

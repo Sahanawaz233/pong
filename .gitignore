@@ -1,32 +1,28 @@
-# Vivado-specific ignore files
+# Vivado Project Files
 *.jou
 *.log
 *.str
-*.dmp
-*.pb
-*.wdb
-*.dir
-*.xpe
-*.csv
+*.zip
+*.dcp
+*.bit
+*.bin
+*.mmi
+*.hwdef
+*.mcs
+*.prm
+*.os
 
-# Ignore Vivado generated directories
+# Vivado Generated Directories
 .Xil/
-*.sim/
+*.runs/
 *.cache/
 *.hw/
-*.runs/
 *.ip_user_files/
+*.sim/
+*.sim_dir/
+*.srcs/sources_1/bd/*/ui/
 
-# Ignore bitstreams and hardware handoff files (optional, but recommended for clean repos)
-# *.bit
-# *.hwdef
-# *.hdf
-
-# OS generated files
+# VS Code / IDE
+.vscode/
+*.code-workspace
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
