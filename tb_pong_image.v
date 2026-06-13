@@ -4,25 +4,23 @@ module tb_pong_image();
 
     // Inputs
     reg clk;
-    reg btn_left;
-    reg btn_right;
-    reg btn_reset;
+    reg [3:0] btn;
+    reg [0:0] sw;
 
     // Outputs
     wire hsync;
     wire vsync;
-    wire [3:0] vga_r;
-    wire [3:0] vga_g;
-    wire [3:0] vga_b;
+    wire [4:0] vga_r;
+    wire [5:0] vga_g;
+    wire [4:0] vga_b;
 
     // Instantiate the Unit Under Test (UUT)
     pong_top uut (
         .clk(clk), 
-        .btn_left(btn_left), 
-        .btn_right(btn_right), 
-        .btn_reset(btn_reset), 
-        .hsync(hsync), 
-        .vsync(vsync), 
+        .btn(btn), 
+        .sw(sw), 
+        .vga_hs(hsync), 
+        .vga_vs(vsync), 
         .vga_r(vga_r), 
         .vga_g(vga_g), 
         .vga_b(vga_b)
@@ -47,11 +45,11 @@ module tb_pong_image();
 
     initial begin
         // Initialize Inputs
-        btn_left = 0;
-        btn_right = 0;
-        btn_reset = 1;
+        btn = 4'b0000;
+        sw = 1'b0;
+        sw[0] = 1;
         #100;
-        btn_reset = 0;
+        sw[0] = 0;
 
         // Open a file to write the image
         file = $fopen("frame.ppm", "w");
@@ -83,10 +81,9 @@ module tb_pong_image();
     // Dump pixels to the file at every pixel clock tick during the active video region
     always @(posedge pixel_clk) begin
         if (capture_active && video_on) begin
-            // vga_r, g, b are 4-bit (0-15). 
-            // We scale them to 8-bit (0-255) for the image file by multiplying by 17.
-            // Example: 4'hF (15) * 17 = 255.
-            $fwrite(file, "%0d %0d %0d\n", vga_r * 17, vga_g * 17, vga_b * 17);
+            // vga_r, g, b are 5, 6, 5 bits respectively.
+            // We scale them to 8-bit (0-255) for the image file.
+            $fwrite(file, "%0d %0d %0d\n", vga_r * 8, vga_g * 4, vga_b * 8);
         end
     end
       

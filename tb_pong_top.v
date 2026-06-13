@@ -28,6 +28,8 @@ module tb_pong_top();
 
     // 125MHz clock generation (8ns period)
     initial begin
+        $dumpfile("waveform.vcd");
+        $dumpvars(0, tb_pong_top);
         clk = 0;
         forever #4 clk = ~clk;
     end

@@ -39,6 +39,11 @@ module pong_top (
     wire [9:0] ball_y;
     wire [15:0] rgb;
     
+    wire [3:0] score1;
+    wire [3:0] score2;
+    wire score1_visible;
+    wire score2_visible;
+    
     // Map internal 16-bit RGB to separate output ports
     assign vga_r = rgb[15:11]; // 5 bits Red
     assign vga_g = rgb[10:5];  // 6 bits Green
@@ -72,7 +77,11 @@ module pong_top (
         .paddle1_y(paddle1_y),
         .paddle2_y(paddle2_y),
         .ball_x(ball_x),
-        .ball_y(ball_y)
+        .ball_y(ball_y),
+        .score1(score1),
+        .score2(score2),
+        .score1_visible(score1_visible),
+        .score2_visible(score2_visible)
     );
 
     // 4. Rendering Engine (Pixel color generation)
@@ -85,6 +94,10 @@ module pong_top (
         .paddle2_y(paddle2_y),
         .ball_x(ball_x),
         .ball_y(ball_y),
+        .score1(score1),
+        .score2(score2),
+        .score1_visible(score1_visible),
+        .score2_visible(score2_visible),
         .rgb(rgb)
     );
 

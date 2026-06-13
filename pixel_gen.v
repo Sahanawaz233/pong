@@ -9,6 +9,10 @@ module pixel_gen (
     input wire [9:0] paddle2_y,
     input wire [9:0] ball_x,
     input wire [9:0] ball_y,
+    input wire [3:0] score1,
+    input wire [3:0] score2,
+    input wire score1_visible,
+    input wire score2_visible,
     output reg [15:0] rgb
 );
 
@@ -33,6 +37,9 @@ module pixel_gen (
     localparam COLOR_BALL   = 16'hFFE0; // Bright Yellow (Ball)
     localparam COLOR_LINE   = 16'hFFFF; // Pure White (Net)
     
+    localparam COLOR_P1_DIM = 16'h018C; // Dim Cyan (Ghost segments for Player 1)
+    localparam COLOR_P2_DIM = 16'h3006; // Dim Magenta (Ghost segments for Player 2)
+    
     // Combinational logic to check if current pixel is inside objects
     wire p1_on = (pixel_x >= PADDLE1_X) && (pixel_x < PADDLE1_X + PADDLE_W) &&
                  (pixel_y >= paddle1_y) && (pixel_y < paddle1_y + PADDLE_H);
@@ -46,17 +53,50 @@ module pixel_gen (
     // Dashed center line (Net)
     wire net_on = (pixel_x == MAX_X/2 || pixel_x == MAX_X/2 - 1) && (pixel_y[4] == 1'b1);
                    
+    // Score Digit Renderers
+    wire p1_score_active;
+    wire p1_score_inactive;
+    seven_segment_pixel u_p1_score (
+        .pixel_x(pixel_x),
+        .pixel_y(pixel_y),
+        .digit_x(10'd140),
+        .digit_y(10'd40),
+        .digit_val(score1),
+        .pixel_active(p1_score_active),
+        .pixel_inactive(p1_score_inactive)
+    );
+
+    wire p2_score_active;
+    wire p2_score_inactive;
+    seven_segment_pixel u_p2_score (
+        .pixel_x(pixel_x),
+        .pixel_y(pixel_y),
+        .digit_x(10'd460),
+        .digit_y(10'd40),
+        .digit_val(score2),
+        .pixel_active(p2_score_active),
+        .pixel_inactive(p2_score_inactive)
+    );
+
     // Output RGB color based on pixel position
     always @(*) begin
         if (!video_on) begin
             rgb = 16'h0000; // Display must be black outside active video region
         end else begin
-            if (p1_on) begin
+            if (ball_on) begin
+                rgb = COLOR_BALL;
+            end else if (p1_on) begin
                 rgb = COLOR_P1;
             end else if (p2_on) begin
                 rgb = COLOR_P2;
-            end else if (ball_on) begin
-                rgb = COLOR_BALL;
+            end else if (p1_score_active) begin
+                rgb = score1_visible ? COLOR_P1 : COLOR_P1_DIM;
+            end else if (p1_score_inactive) begin
+                rgb = COLOR_P1_DIM;
+            end else if (p2_score_active) begin
+                rgb = score2_visible ? COLOR_P2 : COLOR_P2_DIM;
+            end else if (p2_score_inactive) begin
+                rgb = COLOR_P2_DIM;
             end else if (net_on) begin
                 rgb = COLOR_LINE;
             end else begin
